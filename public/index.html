@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<style>
+
+
+.portfolio {
+    z-index: 1;
+    position: absolute;
+    top: 96px;
+    right: -342px;
+    bottom: 0;
+    
+    -moz-transition: right 0.5s ease;
+    transition: right 0.5s ease;
+}
+
+
+input:checked ~ .portfolio { 
+    right: 0;
+}
+input:checked ~ #micImg { 
+    right: 342px;
+}
+
+
+  .speech {border: 1px solid #DDD; width: 300px; padding: 0; margin: 0; border-radius:5px; background-color: #7CD2A6; padding: 12px 20px;}
+  
+  .speech input {border: 0; width: 240px; display: inline-block; height: 30px;}
+
+  #micImg {
+    z-index: 1;
+    cursor: pointer;
+    padding-top: 20px; 
+    position: absolute;
+    top: 103px;
+    right: 15px;
+
+    -moz-transition: right 0.5s ease;
+    transition: right 0.5s ease;
+  }
+
+
+  input[type=checkbox] {
+     display: none;
+  }
+
+  #transcript {
+		width: 90%;
+		padding: 12px 20px;
+		margin: 8px 0;
+		box-sizing: border-box;
+		border: none;
+		border-radius:5px;
+	}
+</style>
+<input id="micImgHold" type="checkbox" role="button" />
+<label for="micImgHold"></label>
+
+<!-- Search Form -->
+<form id="labnol" class="portfolio" method="get" action="https://www.google.com/search">
+  <div class="speech">
+    <textarea name="q" id="transcript" placeholder="Speak"></textarea>
+    <span style="position: absolute;
+    color: darkred;
+    right: 10px;
+    top: 7px;     cursor: pointer;" onclick="document.getElementById('micImgHold').checked = false;">X</span>
+  </div>
+</form>
+<img id="micImg" style="width: 40px;" onclick="startDictation()" src="microphone1600.png" />
+
+<!-- HTML5 Speech Recognition API -->
+<script>
+  function startDictation() {
+
+    document.getElementById("micImgHold").checked = true;
+    console.log(document.getElementById("micImgHold").checked);
+
+    if (window.hasOwnProperty('webkitSpeechRecognition')) {
+
+      var recognition = new webkitSpeechRecognition();
+
+      recognition.continuous = false;
+      recognition.interimResults = false;
+
+      recognition.lang = "en-US";
+      recognition.start();
+
+      recognition.onresult = function(e) {
+        document.getElementById('transcript').value
+                                 = e.results[0][0].transcript;
+        recognition.stop();
+        //document.getElementById('labnol').submit();
+      };
+
+      recognition.onerror = function(e) {
+        recognition.stop();
+      }
+
+    }
+  }
+</script>
+</body>
+</html>
